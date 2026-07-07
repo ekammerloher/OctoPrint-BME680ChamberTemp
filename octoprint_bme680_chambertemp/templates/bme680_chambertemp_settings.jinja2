@@ -2,7 +2,7 @@
   <div class="control-group">
     <label class="control-label">I2C address</label>
     <div class="controls">
-      <select data-bind="value: settings.i2c_address">
+      <select data-bind="value: settings.plugins.bme680_chambertemp.i2c_address">
         <option value="0x76">0x76</option>
         <option value="0x77">0x77</option>
         <option value="auto">auto</option>
@@ -14,14 +14,14 @@
   <div class="control-group">
     <label class="control-label">I2C bus</label>
     <div class="controls">
-      <input type="number" min="0" data-bind="value: settings.i2c_bus">
+      <input type="number" min="0" data-bind="value: settings.plugins.bme680_chambertemp.i2c_bus">
     </div>
   </div>
 
   <div class="control-group">
     <label class="control-label">Polling interval</label>
     <div class="controls">
-      <input type="number" min="1" step="1" data-bind="value: settings.poll_interval">
+      <input type="number" min="1" step="1" data-bind="value: settings.plugins.bme680_chambertemp.poll_interval">
       <span>seconds</span>
     </div>
   </div>
@@ -29,7 +29,7 @@
   <div class="control-group">
     <label class="control-label">Temperature offset</label>
     <div class="controls">
-      <input type="number" step="0.1" data-bind="value: settings.temperature_offset">
+      <input type="number" step="0.1" data-bind="value: settings.plugins.bme680_chambertemp.temperature_offset">
       <span>&deg;C</span>
     </div>
   </div>
@@ -38,7 +38,7 @@
     <label class="control-label">Inject chamber temperature</label>
     <div class="controls">
       <label class="checkbox">
-        <input type="checkbox" data-bind="checked: settings.inject_temperature">
+        <input type="checkbox" data-bind="checked: settings.plugins.bme680_chambertemp.inject_temperature">
         Add chamber temperature to OctoPrint's default temperature graph
       </label>
     </div>
@@ -47,7 +47,7 @@
   <div class="control-group">
     <label class="control-label">Injected temperature name</label>
     <div class="controls">
-      <input type="text" data-bind="value: settings.temperature_name" placeholder="chamber">
+      <input type="text" data-bind="value: settings.plugins.bme680_chambertemp.temperature_name" placeholder="chamber">
       <p class="help-block">Used as the temperature key in OctoPrint's default graph, for example <code>chamber</code>.</p>
     </div>
   </div>
@@ -56,7 +56,7 @@
     <label class="control-label">Show plugin tab</label>
     <div class="controls">
       <label class="checkbox">
-        <input type="checkbox" data-bind="checked: settings.show_tab">
+        <input type="checkbox" data-bind="checked: settings.plugins.bme680_chambertemp.show_tab">
         Show the dedicated BME680 tab
       </label>
     </div>
@@ -65,7 +65,7 @@
   <div class="control-group">
     <label class="control-label">Logging verbosity</label>
     <div class="controls">
-      <select data-bind="value: settings.logging_verbosity">
+      <select data-bind="value: settings.plugins.bme680_chambertemp.logging_verbosity">
         <option value="normal">Normal</option>
         <option value="debug">Debug</option>
       </select>

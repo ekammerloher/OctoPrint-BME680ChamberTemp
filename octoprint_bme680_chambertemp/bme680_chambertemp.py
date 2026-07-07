@@ -20,7 +20,7 @@ from .core import (
     validate_temperature_offset,
 )
 
-PLUGIN_VERSION = "0.2.2"
+PLUGIN_VERSION = "0.2.3"
 CHIP_ID_REGISTER = 0xD0
 
 
@@ -70,7 +70,6 @@ class BME680ChamberTempPlugin(
                 "type": "settings",
                 "name": "BME680 Chamber Temp",
                 "template": "bme680_chambertemp_settings.jinja2",
-                "custom_bindings": True,
             },
         ]
 

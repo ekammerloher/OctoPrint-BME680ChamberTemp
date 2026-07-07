@@ -2,8 +2,6 @@ $(function () {
     function BME680ChamberTempViewModel(parameters) {
         var self = this;
 
-        self.settingsViewModel = parameters[0];
-        self.settings = self.settingsViewModel.settings.plugins.bme680_chambertemp;
         self.status = ko.observable("initializing");
         self.temperature = ko.observable(null);
         self.humidity = ko.observable(null);
@@ -158,7 +156,7 @@ $(function () {
 
     OCTOPRINT_VIEWMODELS.push({
         construct: BME680ChamberTempViewModel,
-        dependencies: ["settingsViewModel"],
-        elements: ["#tab_bme680_chambertemp", "#settings_plugin_bme680_chambertemp"]
+        dependencies: [],
+        elements: ["#tab_bme680_chambertemp"]
     });
 });
