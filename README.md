@@ -20,6 +20,12 @@ Features:
 
 This plugin does not support arbitrary environmental sensors.
 
+## Hardware setup
+
+![BME680 mounted on a Raspberry Pi shield](docs/images/hardware-setup.jpg)
+
+Example installation with the BME680 mounted on a Raspberry Pi shield. The additional level shifter board shown in the photo is not part of the plugin requirements.
+
 ## Wiring assumptions
 
 This plugin assumes the BME680 is wired to the Raspberry Pi's I2C bus, typically:
@@ -93,17 +99,6 @@ Gas resistance is raw resistance from the BME680 sensor. It is not a calibrated 
 - Confirm the configured bus and address match your hardware.
 - If using `auto`, check whether the device is on `0x76` or `0x77`.
 - If the plugin reports repeated initialization failures, verify I2C wiring, power, and kernel support.
-- If you migrated to a new OctoPi image, reinstall the plugin in the new OctoPrint virtual environment instead of copying old `site-packages` files.
-- Do not patch `site-packages/adafruit_bme680.py`. This plugin is designed to use the upstream library unchanged.
-
-## Migration from an older local install
-
-If you previously used an older local copy of this plugin:
-
-- remove any manually edited `adafruit_bme680.py` from the OctoPrint environment
-- install this repository cleanly through `pip` or Plugin Manager
-- re-enter your I2C address, bus, interval, optional temperature offset, and injected temperature name in OctoPrint settings
-- choose whether the dedicated tab and default graph injection should stay enabled
 
 ## Uninstall
 
