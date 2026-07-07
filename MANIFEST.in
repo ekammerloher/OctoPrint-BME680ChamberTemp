@@ -1,2 +1,0 @@
-recursive-include octoprint_bme680_chambertemp/static *
-recursive-include octoprint_bme680_chambertemp/templates *

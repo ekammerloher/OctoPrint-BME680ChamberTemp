@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "OctoPrint-BME680ChamberTemp"
+version = "0.2.0"
+description = "OctoPrint plugin for a Bosch BME680 chamber sensor over I2C"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.8"
+authors = [
+  { name = "Eugen Kammerloher" }
+]
+keywords = ["octoprint", "bme680", "raspberry-pi", "i2c"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Framework :: OctoPrint",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Home Automation",
+  "Topic :: System :: Hardware :: Hardware Drivers"
+]
+dependencies = [
+  "OctoPrint>=1.9.0",
+  "adafruit-circuitpython-bme680>=3.7.12",
+  "Adafruit-Blinka>=8.0.0",
+  "adafruit-extended-bus>=1.0.2"
+]
+
+[project.urls]
+Homepage = "https://github.com/example-user/OctoPrint-BME680ChamberTemp"
+Repository = "https://github.com/example-user/OctoPrint-BME680ChamberTemp"
+Issues = "https://github.com/example-user/OctoPrint-BME680ChamberTemp/issues"
+
+[project.entry-points."octoprint.plugin"]
+bme680_chambertemp = "octoprint_bme680_chambertemp"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["octoprint_bme680_chambertemp*"]
+
+[tool.setuptools.package-data]
+octoprint_bme680_chambertemp = [
+  "static/js/*.js",
+  "static/css/*.css",
+  "templates/*.jinja2"
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

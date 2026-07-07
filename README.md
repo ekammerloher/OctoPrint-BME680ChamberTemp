@@ -1,0 +1,121 @@
+# OctoPrint-BME680ChamberTemp
+
+`OctoPrint-BME680ChamberTemp` reads a genuine Bosch BME680 over I2C on a Raspberry Pi, shows temperature, relative humidity, and raw gas resistance in OctoPrint, and optionally injects the temperature into OctoPrint's default temperature graph as `chamber`.
+
+The repository is ready for GitHub-based installation and release packaging. Update the placeholder GitHub URLs in `pyproject.toml` before publishing.
+
+## Supported hardware and assumptions
+
+- Raspberry Pi running OctoPi / Raspberry Pi OS with I2C enabled
+- Genuine Bosch BME680 on I2C
+- Default tested address `0x76`; optional `auto` mode also tries `0x77`
+- Default bus `1`
+- OctoPrint 1.9+ and current supported Python 3 versions
+
+This plugin does not support arbitrary environmental sensors.
+
+## Wiring assumptions
+
+This plugin assumes the BME680 is wired to the Raspberry Pi's I2C bus, typically:
+
+- `3V3`
+- `GND`
+- `SDA`
+- `SCL`
+
+Follow your board vendor's pinout and confirm the sensor is powered at the correct voltage.
+
+## Enable I2C on Raspberry Pi
+
+1. Enable I2C in Raspberry Pi configuration.
+2. Confirm the interface is active in `/boot/config.txt` or the current Bookworm-equivalent configuration flow.
+3. Verify the device appears on the expected bus, for example with `i2cdetect -y 1`.
+
+This plugin does not change Raspberry Pi boot configuration automatically.
+
+## Installation from GitHub
+
+Install into the OctoPrint virtual environment:
+
+```bash
+~/oprint/bin/pip install "git+https://github.com/<user>/OctoPrint-BME680ChamberTemp.git"
+```
+
+You can also install it from OctoPrint's Plugin Manager using a GitHub release archive URL.
+
+## Configuration
+
+Open OctoPrint settings and configure:
+
+- I2C address: `0x76`, `0x77`, or `auto`
+- I2C bus: defaults to `1`
+- Polling interval: defaults to `5` seconds, minimum `1`
+- Temperature offset: defaults to `0.0` deg C
+- Inject chamber temperature into OctoPrint's default temperature graph
+- Show or hide the dedicated plugin tab
+- Logging verbosity: `normal` or `debug`
+
+Settings are applied at runtime. The worker retries sensor initialization in the background and does not block OctoPrint startup.
+
+## What the UI shows
+
+- Temperature in deg C
+- Relative humidity in %
+- Gas resistance in Ohm
+- Current sensor status
+- Last successful reading time
+- Last error message
+- Configured and active bus/address
+- Plugin and library versions
+
+Gas resistance is raw resistance from the BME680 sensor. It is not a calibrated VOC concentration or air-quality index.
+
+## Troubleshooting
+
+- Confirm the sensor is really a BME680 and that the chip ID reads `0x61`.
+- Confirm the configured bus and address match your hardware.
+- If using `auto`, check whether the device is on `0x76` or `0x77`.
+- If the plugin reports repeated initialization failures, verify I2C wiring, power, and kernel support.
+- If you migrated to a new OctoPi image, reinstall the plugin in the new OctoPrint virtual environment instead of copying old `site-packages` files.
+- Do not patch `site-packages/adafruit_bme680.py`. This plugin is designed to use the upstream library unchanged.
+
+## Legacy migration note
+
+If you previously used the legacy local plugin version:
+
+- remove any manually edited `adafruit_bme680.py` from the OctoPrint environment;
+- install this repository cleanly through `pip` or Plugin Manager;
+- re-enter your I2C address, bus, interval, and optional temperature offset in OctoPrint settings;
+- check whether you want the dedicated tab and the default temperature graph injection enabled.
+
+The legacy plugin used a blocking retry path during startup, a fixed sleep loop, and stale front-end rendering. This version moves sensor retries into a managed worker thread and exposes explicit status diagnostics.
+
+## Legacy patched dependency note
+
+No legacy patch file is stored in this repository, so the exact local `site-packages` modification could not be audited from source control. The upstream Adafruit library already supports BME680 chip ID `0x61` and explicit address selection, so this refactor intentionally keeps the dependency unmodified.
+
+Behavior that depends on an unknown manual patch is not preserved. If a local patch had been masking an environment-specific issue, this version surfaces the underlying initialization or read failure in OctoPrint logs and diagnostics instead.
+
+## Uninstall
+
+Uninstall from OctoPrint's Plugin Manager or run:
+
+```bash
+~/oprint/bin/pip uninstall OctoPrint-BME680ChamberTemp
+```
+
+Then restart OctoPrint.
+
+## Development
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -U pip
+pip install -e .
+pip install pytest ruff build
+pytest
+ruff check .
+ruff format --check .
+python -m build
+```
