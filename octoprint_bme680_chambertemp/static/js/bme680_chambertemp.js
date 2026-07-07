@@ -14,6 +14,7 @@ $(function () {
         self.configuredBus = ko.observable(null);
         self.configuredAddress = ko.observable(null);
         self.activeAddress = ko.observable(null);
+        self.temperatureName = ko.observable("chamber");
         self.pluginVersion = ko.observable(null);
         self.libraryVersion = ko.observable(null);
         self.showTab = ko.observable(true);
@@ -75,6 +76,7 @@ $(function () {
             self.configuredBus(data.configured_bus);
             self.configuredAddress(data.configured_address || "--");
             self.activeAddress(data.active_address || "--");
+            self.temperatureName(data.temperature_name || "chamber");
             self.pluginVersion(data.plugin_version || "--");
             self.libraryVersion(data.library_version || "--");
             self.showTab(data.show_tab !== false);

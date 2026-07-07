@@ -45,6 +45,14 @@
   </div>
 
   <div class="control-group">
+    <label class="control-label">Injected temperature name</label>
+    <div class="controls">
+      <input type="text" data-bind="value: settings.temperature_name" placeholder="chamber">
+      <p class="help-block">Used as the temperature key in OctoPrint's default graph, for example <code>chamber</code>.</p>
+    </div>
+  </div>
+
+  <div class="control-group">
     <label class="control-label">Show plugin tab</label>
     <div class="controls">
       <label class="checkbox">
@@ -71,5 +79,6 @@
   <p><strong>Last error:</strong> <span data-bind="text: lastErrorText"></span></p>
   <p><strong>Configured bus/address:</strong> <span data-bind="text: configuredBus"></span> / <span data-bind="text: configuredAddress"></span></p>
   <p><strong>Active address:</strong> <span data-bind="text: activeAddress"></span></p>
+  <p><strong>Injected temperature name:</strong> <span data-bind="text: temperatureName"></span></p>
   <p><strong>Versions:</strong> plugin <span data-bind="text: pluginVersion"></span>, library <span data-bind="text: libraryVersion"></span></p>
 </div>

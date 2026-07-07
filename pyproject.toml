@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "OctoPrint-BME680ChamberTemp"
-version = "0.2.0"
+version = "0.2.1"
 description = "OctoPrint plugin for a Bosch BME680 chamber sensor over I2C"
 readme = "README.md"
 license = "MIT"
@@ -30,9 +30,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/example-user/OctoPrint-BME680ChamberTemp"
-Repository = "https://github.com/example-user/OctoPrint-BME680ChamberTemp"
-Issues = "https://github.com/example-user/OctoPrint-BME680ChamberTemp/issues"
+Homepage = "https://github.com/ekammerloher/OctoPrint-BME680ChamberTemp"
+Repository = "https://github.com/ekammerloher/OctoPrint-BME680ChamberTemp"
+Issues = "https://github.com/ekammerloher/OctoPrint-BME680ChamberTemp/issues"
 
 [project.entry-points."octoprint.plugin"]
 bme680_chambertemp = "octoprint_bme680_chambertemp"

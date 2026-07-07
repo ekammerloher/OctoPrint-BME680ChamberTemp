@@ -1,8 +1,14 @@
 # OctoPrint-BME680ChamberTemp
 
-`OctoPrint-BME680ChamberTemp` reads a genuine Bosch BME680 over I2C on a Raspberry Pi, shows temperature, relative humidity, and raw gas resistance in OctoPrint, and optionally injects the temperature into OctoPrint's default temperature graph as `chamber`.
+`OctoPrint-BME680ChamberTemp` reads a genuine Bosch BME680 over I2C on a Raspberry Pi, shows temperature, relative humidity, and raw gas resistance in OctoPrint, and optionally injects the temperature into OctoPrint's default temperature graph using a configurable temperature name.
 
-The repository is ready for GitHub-based installation and release packaging. Update the placeholder GitHub URLs in `pyproject.toml` before publishing.
+Features:
+
+- configurable I2C bus and address, including `auto` mode for `0x76` and `0x77`
+- configurable polling interval and temperature offset
+- optional temperature injection into OctoPrint's default graph
+- dedicated tab with live readings and diagnostics
+- retry-based background worker that tolerates temporary sensor failures
 
 ## Supported hardware and assumptions
 
@@ -38,7 +44,7 @@ This plugin does not change Raspberry Pi boot configuration automatically.
 Install into the OctoPrint virtual environment:
 
 ```bash
-~/oprint/bin/pip install "git+https://github.com/<user>/OctoPrint-BME680ChamberTemp.git"
+~/oprint/bin/pip install "git+https://github.com/ekammerloher/OctoPrint-BME680ChamberTemp.git"
 ```
 
 You can also install it from OctoPrint's Plugin Manager using a GitHub release archive URL.
@@ -52,10 +58,21 @@ Open OctoPrint settings and configure:
 - Polling interval: defaults to `5` seconds, minimum `1`
 - Temperature offset: defaults to `0.0` deg C
 - Inject chamber temperature into OctoPrint's default temperature graph
+- Injected temperature name: defaults to `chamber`
 - Show or hide the dedicated plugin tab
 - Logging verbosity: `normal` or `debug`
 
 Settings are applied at runtime. The worker retries sensor initialization in the background and does not block OctoPrint startup.
+
+## Diagnostics
+
+The plugin reports:
+
+- current sensor status
+- last successful reading time
+- last error message
+- configured and active bus/address
+- plugin and library versions
 
 ## What the UI shows
 
@@ -79,22 +96,14 @@ Gas resistance is raw resistance from the BME680 sensor. It is not a calibrated 
 - If you migrated to a new OctoPi image, reinstall the plugin in the new OctoPrint virtual environment instead of copying old `site-packages` files.
 - Do not patch `site-packages/adafruit_bme680.py`. This plugin is designed to use the upstream library unchanged.
 
-## Legacy migration note
+## Migration from an older local install
 
-If you previously used the legacy local plugin version:
+If you previously used an older local copy of this plugin:
 
-- remove any manually edited `adafruit_bme680.py` from the OctoPrint environment;
-- install this repository cleanly through `pip` or Plugin Manager;
-- re-enter your I2C address, bus, interval, and optional temperature offset in OctoPrint settings;
-- check whether you want the dedicated tab and the default temperature graph injection enabled.
-
-The legacy plugin used a blocking retry path during startup, a fixed sleep loop, and stale front-end rendering. This version moves sensor retries into a managed worker thread and exposes explicit status diagnostics.
-
-## Legacy patched dependency note
-
-No legacy patch file is stored in this repository, so the exact local `site-packages` modification could not be audited from source control. The upstream Adafruit library already supports BME680 chip ID `0x61` and explicit address selection, so this refactor intentionally keeps the dependency unmodified.
-
-Behavior that depends on an unknown manual patch is not preserved. If a local patch had been masking an environment-specific issue, this version surfaces the underlying initialization or read failure in OctoPrint logs and diagnostics instead.
+- remove any manually edited `adafruit_bme680.py` from the OctoPrint environment
+- install this repository cleanly through `pip` or Plugin Manager
+- re-enter your I2C address, bus, interval, optional temperature offset, and injected temperature name in OctoPrint settings
+- choose whether the dedicated tab and default graph injection should stay enabled
 
 ## Uninstall
 

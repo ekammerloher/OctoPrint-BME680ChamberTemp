@@ -111,6 +111,15 @@ def test_no_temperature_injection_when_disabled():
     assert parsed == {}
 
 
+def test_custom_temperature_name_is_used_for_injection():
+    plugin = make_plugin({**make_plugin().get_settings_defaults(), "temperature_name": "enclosure"})
+    plugin._sensor = SensorSequence(readings=[(24.0, 40.0, 12000.0)])
+    plugin._perform_read(plugin._current_config())
+
+    parsed = plugin.temperatures_received(None, {})
+    assert parsed == {"enclosure": (24.0, None)}
+
+
 def test_no_temperature_injection_without_valid_reading():
     plugin = make_plugin()
     parsed = plugin.temperatures_received(None, {})

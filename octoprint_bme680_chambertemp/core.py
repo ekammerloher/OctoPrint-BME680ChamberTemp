@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 
 DEFAULT_I2C_ADDRESS = "0x76"
 AUTO_I2C_ADDRESS = "auto"
+DEFAULT_TEMPERATURE_NAME = "chamber"
 MIN_POLL_INTERVAL = 1.0
 RETRY_INTERVAL = 10.0
 DEFAULT_POLL_INTERVAL = 5.0
@@ -71,6 +72,17 @@ def validate_temperature_offset(value):
         raise ValueError("Temperature offset must be numeric") from exc
 
 
+def validate_temperature_name(value):
+    if value is None:
+        return DEFAULT_TEMPERATURE_NAME
+
+    cleaned = str(value).strip()
+    if not cleaned:
+        return DEFAULT_TEMPERATURE_NAME
+
+    return cleaned
+
+
 def sanitize_number(value):
     try:
         number = float(value)
@@ -95,6 +107,7 @@ def default_settings():
         "poll_interval": DEFAULT_POLL_INTERVAL,
         "temperature_offset": 0.0,
         "inject_temperature": True,
+        "temperature_name": DEFAULT_TEMPERATURE_NAME,
         "show_tab": True,
         "logging_verbosity": "normal",
     }

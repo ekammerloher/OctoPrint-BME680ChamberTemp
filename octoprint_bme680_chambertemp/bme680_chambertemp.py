@@ -16,10 +16,11 @@ from .core import (
     sanitize_number,
     validate_bus,
     validate_poll_interval,
+    validate_temperature_name,
     validate_temperature_offset,
 )
 
-PLUGIN_VERSION = "0.2.0"
+PLUGIN_VERSION = "0.2.1"
 CHIP_ID_REGISTER = 0xD0
 
 
@@ -106,12 +107,13 @@ class BME680ChamberTempPlugin(
         self._logger.info(
             (
                 "Updated settings: bus=%s address=%s poll_interval=%ss "
-                "inject_temperature=%s show_tab=%s"
+                "inject_temperature=%s temperature_name=%s show_tab=%s"
             ),
             self._settings.get_int(["i2c_bus"]),
             self._settings.get(["i2c_address"]),
             self._settings.get_float(["poll_interval"]),
             self._settings.get_boolean(["inject_temperature"]),
+            self._settings.get(["temperature_name"]),
             self._settings.get_boolean(["show_tab"]),
         )
         self._reset_sensor("initializing")
@@ -127,7 +129,7 @@ class BME680ChamberTempPlugin(
         if temperature is None:
             return parsed_temps
 
-        parsed_temps.update({"chamber": (temperature, None)})
+        parsed_temps.update({self._settings.get(["temperature_name"]): (temperature, None)})
         return parsed_temps
 
     def get_hooks(self):
@@ -143,6 +145,7 @@ class BME680ChamberTempPlugin(
         cleaned["temperature_offset"] = validate_temperature_offset(
             data.get("temperature_offset", 0.0)
         )
+        cleaned["temperature_name"] = validate_temperature_name(data.get("temperature_name"))
 
         verbosity = str(data.get("logging_verbosity", "normal")).strip().lower()
         cleaned["logging_verbosity"] = verbosity if verbosity == "debug" else "normal"
@@ -159,6 +162,7 @@ class BME680ChamberTempPlugin(
                 self._settings.get_float(["temperature_offset"])
             ),
             "inject_temperature": self._settings.get_boolean(["inject_temperature"]),
+            "temperature_name": validate_temperature_name(self._settings.get(["temperature_name"])),
             "show_tab": self._settings.get_boolean(["show_tab"]),
             "logging_verbosity": self._settings.get(["logging_verbosity"]),
         }
@@ -186,6 +190,7 @@ class BME680ChamberTempPlugin(
             if self._active_address is None
             else f"0x{self._active_address:02X}",
             "inject_temperature": config["inject_temperature"],
+            "temperature_name": config["temperature_name"],
             "show_tab": config["show_tab"],
             "plugin_version": PLUGIN_VERSION,
             "library_version": self._library_version(),

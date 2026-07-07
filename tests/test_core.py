@@ -4,6 +4,7 @@ from octoprint_bme680_chambertemp.core import (
     normalize_i2c_address,
     sanitize_number,
     validate_poll_interval,
+    validate_temperature_name,
 )
 
 
@@ -40,3 +41,8 @@ def test_sanitize_number_rejects_invalid_values():
     assert sanitize_number(float("nan")) is None
     assert sanitize_number("not-a-number") is None
     assert sanitize_number(1.25) == 1.25
+
+
+def test_temperature_name_defaults_when_blank():
+    assert validate_temperature_name("") == "chamber"
+    assert validate_temperature_name(" enclosure ") == "enclosure"
