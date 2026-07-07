@@ -1,31 +1,114 @@
-$(function() {
+$(function () {
     function BME680ChamberTempViewModel(parameters) {
         var self = this;
 
-        self.onDataUpdaterPluginMessage = function(plugin, data) {
-            // Only handle messages from our plugin
-            if (plugin !== "bme680_chambertemp") return;
+        self.settingsViewModel = parameters[0];
+        self.settings = self.settingsViewModel.settings.plugins.bme680_chambertemp;
+        self.status = ko.observable("initializing");
+        self.temperature = ko.observable(null);
+        self.humidity = ko.observable(null);
+        self.gasResistance = ko.observable(null);
+        self.lastUpdate = ko.observable(null);
+        self.lastSuccess = ko.observable(null);
+        self.lastError = ko.observable(null);
+        self.configuredBus = ko.observable(null);
+        self.configuredAddress = ko.observable(null);
+        self.activeAddress = ko.observable(null);
+        self.pluginVersion = ko.observable(null);
+        self.libraryVersion = ko.observable(null);
+        self.showTab = ko.observable(true);
 
-            // If the plugin sent temperature, humidity, voc
-            if (data.hasOwnProperty("temperature")) {
-                $("#bme680_temp_value").text(data.temperature.toFixed(2));
-            }
-            if (data.hasOwnProperty("humidity")) {
-                $("#bme680_humidity_value").text(data.humidity.toFixed(2));
-            }
-            if (data.hasOwnProperty("voc")) {
-                // BME680 gas reading is in ohms, can be quite large
-                $("#bme680_voc_value").text(data.voc.toFixed(0));
-            }
+        self.formatNumber = function (value, digits) {
+            return _.isNumber(value) && _.isFinite(value) ? value.toFixed(digits) : "--";
+        };
+
+        self.temperatureText = ko.pureComputed(function () {
+            return self.formatNumber(self.temperature(), 2);
+        });
+
+        self.humidityText = ko.pureComputed(function () {
+            return self.formatNumber(self.humidity(), 2);
+        });
+
+        self.gasResistanceText = ko.pureComputed(function () {
+            return _.isNumber(self.gasResistance()) && _.isFinite(self.gasResistance())
+                ? Math.round(self.gasResistance()).toString()
+                : "--";
+        });
+
+        self.statusText = ko.pureComputed(function () {
+            var status = self.status();
+            if (status === "connected") return "Connected";
+            if (status === "initializing") return "Initializing";
+            if (status === "read_error") return "Read error";
+            if (status === "disconnected") return "Disconnected";
+            if (status === "stopped") return "Stopped";
+            return "Unknown";
+        });
+
+        self.isReadingAvailable = ko.pureComputed(function () {
+            return _.isNumber(self.temperature()) && _.isFinite(self.temperature());
+        });
+
+        self.lastUpdateText = ko.pureComputed(function () {
+            return self.lastUpdate() || "--";
+        });
+
+        self.lastSuccessText = ko.pureComputed(function () {
+            return self.lastSuccess() || "--";
+        });
+
+        self.lastErrorText = ko.pureComputed(function () {
+            return self.lastError() || "--";
+        });
+
+        self.updateState = function (data) {
+            if (!data) return;
+
+            self.status(data.status || "unknown");
+            self.temperature(_.isNumber(data.temperature) && _.isFinite(data.temperature) ? data.temperature : null);
+            self.humidity(_.isNumber(data.humidity) && _.isFinite(data.humidity) ? data.humidity : null);
+            self.gasResistance(_.isNumber(data.gas_resistance) && _.isFinite(data.gas_resistance) ? data.gas_resistance : null);
+            self.lastUpdate(data.reading_timestamp_iso || null);
+            self.lastSuccess(data.last_success_iso || null);
+            self.lastError(data.last_error || null);
+            self.configuredBus(data.configured_bus);
+            self.configuredAddress(data.configured_address || "--");
+            self.activeAddress(data.active_address || "--");
+            self.pluginVersion(data.plugin_version || "--");
+            self.libraryVersion(data.library_version || "--");
+            self.showTab(data.show_tab !== false);
+            self.toggleTabVisibility();
+        };
+
+        self.toggleTabVisibility = function () {
+            var tabLink = $("a[href='#tab_bme680_chambertemp']").closest("li");
+            tabLink.toggle(self.showTab());
+        };
+
+        self.requestState = function () {
+            OctoPrint.simpleApiGet("bme680_chambertemp").done(function (response) {
+                self.updateState(response);
+            });
+        };
+
+        self.onBeforeBinding = function () {
+            self.requestState();
+        };
+
+        self.onSettingsShown = function () {
+            self.requestState();
+        };
+
+        self.onDataUpdaterPluginMessage = function (plugin, data) {
+            if (plugin !== "bme680_chambertemp") return;
+            self.updateState(data);
         };
     }
 
-    // Register ViewModel
     OCTOPRINT_VIEWMODELS.push({
         construct: BME680ChamberTempViewModel,
-        dependencies: [],
-        // Bind to our custom tab container
-        elements: ["#tab_bme680_chambertemp"]
+        dependencies: ["settingsViewModel"],
+        elements: ["#tab_bme680_chambertemp", "#settings_plugin_bme680_chambertemp"]
     });
 });
-

@@ -1,0 +1,51 @@
+.bme680-chambertemp {
+    padding: 16px;
+}
+
+.bme680-chambertemp__header {
+    margin-bottom: 16px;
+}
+
+.bme680-chambertemp__grid {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    margin-bottom: 20px;
+}
+
+.bme680-chambertemp__card {
+    background: #f7f7f9;
+    border: 1px solid #d9d9df;
+    border-radius: 6px;
+    padding: 12px 14px;
+}
+
+.bme680-chambertemp__label {
+    color: #555;
+    display: block;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.bme680-chambertemp__value {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.bme680-chambertemp__meta {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.bme680-chambertemp__meta-item {
+    border-top: 1px solid #e3e3e8;
+    padding-top: 8px;
+}
+
+.bme680-chambertemp__warning {
+    color: #a94442;
+}

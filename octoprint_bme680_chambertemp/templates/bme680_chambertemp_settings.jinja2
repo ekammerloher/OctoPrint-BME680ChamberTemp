@@ -1,0 +1,75 @@
+<div id="settings_plugin_bme680_chambertemp" class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label">I2C address</label>
+    <div class="controls">
+      <select data-bind="value: settings.i2c_address">
+        <option value="0x76">0x76</option>
+        <option value="0x77">0x77</option>
+        <option value="auto">auto</option>
+      </select>
+      <p class="help-block">Auto mode tries 0x76 first, then 0x77.</p>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label">I2C bus</label>
+    <div class="controls">
+      <input type="number" min="0" data-bind="value: settings.i2c_bus">
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label">Polling interval</label>
+    <div class="controls">
+      <input type="number" min="1" step="1" data-bind="value: settings.poll_interval">
+      <span>seconds</span>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label">Temperature offset</label>
+    <div class="controls">
+      <input type="number" step="0.1" data-bind="value: settings.temperature_offset">
+      <span>&deg;C</span>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label">Inject chamber temperature</label>
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox" data-bind="checked: settings.inject_temperature">
+        Add chamber temperature to OctoPrint's default temperature graph
+      </label>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label">Show plugin tab</label>
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox" data-bind="checked: settings.show_tab">
+        Show the dedicated BME680 tab
+      </label>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <label class="control-label">Logging verbosity</label>
+    <div class="controls">
+      <select data-bind="value: settings.logging_verbosity">
+        <option value="normal">Normal</option>
+        <option value="debug">Debug</option>
+      </select>
+    </div>
+  </div>
+
+  <hr>
+  <h4>Diagnostics</h4>
+  <p><strong>Status:</strong> <span data-bind="text: statusText"></span></p>
+  <p><strong>Last successful reading:</strong> <span data-bind="text: lastSuccessText"></span></p>
+  <p><strong>Last error:</strong> <span data-bind="text: lastErrorText"></span></p>
+  <p><strong>Configured bus/address:</strong> <span data-bind="text: configuredBus"></span> / <span data-bind="text: configuredAddress"></span></p>
+  <p><strong>Active address:</strong> <span data-bind="text: activeAddress"></span></p>
+  <p><strong>Versions:</strong> plugin <span data-bind="text: pluginVersion"></span>, library <span data-bind="text: libraryVersion"></span></p>
+</div>
