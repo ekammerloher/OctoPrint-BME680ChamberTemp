@@ -22,7 +22,7 @@ This plugin does not support arbitrary environmental sensors.
 
 ## Hardware setup
 
-![BME680 mounted on a Raspberry Pi shield](docs/images/hardware-setup.jpg)
+<img src="docs/images/hardware-setup.jpg" alt="BME680 mounted on a Raspberry Pi shield" width="50%">
 
 Example installation with the BME680 mounted on a Raspberry Pi shield. The additional level shifter board shown in the photo is not part of the plugin requirements.
 
@@ -54,6 +54,8 @@ Install into the OctoPrint virtual environment:
 ```
 
 You can also install it from OctoPrint's Plugin Manager using a GitHub release archive URL.
+
+For tagged releases, GitHub Actions automatically publishes release artifacts. In Plugin Manager, you can use the source archive URL for a tag or the generated GitHub release page.
 
 ## Configuration
 
