@@ -45,6 +45,20 @@ Follow your board vendor's pinout and confirm the sensor is powered at the corre
 
 This plugin does not change Raspberry Pi boot configuration automatically.
 
+For setups that are more reliable with slower bus communication, the following `/boot/config.txt` settings have been used successfully:
+
+```ini
+dtparam=i2c_arm=on
+dtparam=i2c_arm_baudrate=1000
+dtparam=i2c_baudrate=1000
+dtparam=spi=on
+camera_auto_detect=1
+start_x=1
+gpu_mem=128
+```
+
+Only `i2c_arm` is required for this plugin. The reduced I2C baudrate can help if the sensor wiring or attached hardware is sensitive.
+
 ## Installation from GitHub
 
 Install into the OctoPrint virtual environment:
