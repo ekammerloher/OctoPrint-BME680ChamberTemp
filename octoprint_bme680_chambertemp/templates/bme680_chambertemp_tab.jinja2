@@ -2,9 +2,9 @@
   <div class="bme680-chambertemp__header">
     <h2>BME680 Chamber Environment</h2>
     <p>
-      Status: <strong data-bind="text: statusText"></strong>
+      Status: <strong id="bme680_chambertemp_status" data-bind="text: statusText">Initializing</strong>
       <!-- ko if: lastError -->
-      <span class="bme680-chambertemp__warning" data-bind="text: lastError"></span>
+      <span id="bme680_chambertemp_last_error" class="bme680-chambertemp__warning" data-bind="text: lastError"></span>
       <!-- /ko -->
     </p>
   </div>
@@ -12,38 +12,38 @@
   <div class="bme680-chambertemp__grid">
     <div class="bme680-chambertemp__card">
       <span class="bme680-chambertemp__label">Temperature</span>
-      <span class="bme680-chambertemp__value" data-bind="text: temperatureText"></span> <span>&deg;C</span>
+      <span id="bme680_chambertemp_temperature" class="bme680-chambertemp__value" data-bind="text: temperatureText">--</span> <span>&deg;C</span>
     </div>
     <div class="bme680-chambertemp__card">
       <span class="bme680-chambertemp__label">Relative humidity</span>
-      <span class="bme680-chambertemp__value" data-bind="text: humidityText"></span> <span>%</span>
+      <span id="bme680_chambertemp_humidity" class="bme680-chambertemp__value" data-bind="text: humidityText">--</span> <span>%</span>
     </div>
     <div class="bme680-chambertemp__card">
       <span class="bme680-chambertemp__label">Gas resistance</span>
-      <span class="bme680-chambertemp__value" data-bind="text: gasResistanceText"></span> <span>&Omega;</span>
+      <span id="bme680_chambertemp_gas" class="bme680-chambertemp__value" data-bind="text: gasResistanceText">--</span> <span>&Omega;</span>
     </div>
   </div>
 
   <div class="bme680-chambertemp__meta">
     <div class="bme680-chambertemp__meta-item">
-      <strong>Last update:</strong> <span data-bind="text: lastUpdateText"></span>
+      <strong>Last update:</strong> <span id="bme680_chambertemp_last_update" data-bind="text: lastUpdateText">--</span>
     </div>
     <div class="bme680-chambertemp__meta-item">
-      <strong>Last successful reading:</strong> <span data-bind="text: lastSuccessText"></span>
+      <strong>Last successful reading:</strong> <span id="bme680_chambertemp_last_success" data-bind="text: lastSuccessText">--</span>
     </div>
     <div class="bme680-chambertemp__meta-item">
       <strong>Configured bus/address:</strong>
-      <span data-bind="text: configuredBus"></span> /
-      <span data-bind="text: configuredAddress"></span>
+      <span id="bme680_chambertemp_configured_bus" data-bind="text: configuredBus">--</span> /
+      <span id="bme680_chambertemp_configured_address" data-bind="text: configuredAddress">--</span>
     </div>
     <div class="bme680-chambertemp__meta-item">
-      <strong>Active address:</strong> <span data-bind="text: activeAddress"></span>
+      <strong>Active address:</strong> <span id="bme680_chambertemp_active_address" data-bind="text: activeAddress">--</span>
     </div>
     <div class="bme680-chambertemp__meta-item">
-      <strong>Plugin version:</strong> <span data-bind="text: pluginVersion"></span>
+      <strong>Plugin version:</strong> <span id="bme680_chambertemp_plugin_version" data-bind="text: pluginVersion">--</span>
     </div>
     <div class="bme680-chambertemp__meta-item">
-      <strong>Adafruit library version:</strong> <span data-bind="text: libraryVersion"></span>
+      <strong>Adafruit library version:</strong> <span id="bme680_chambertemp_library_version" data-bind="text: libraryVersion">--</span>
     </div>
   </div>
 </div>

@@ -20,7 +20,7 @@ from .core import (
     validate_temperature_offset,
 )
 
-PLUGIN_VERSION = "0.2.1"
+PLUGIN_VERSION = "0.2.2"
 CHIP_ID_REGISTER = 0xD0
 
 
@@ -79,6 +79,12 @@ class BME680ChamberTempPlugin(
             "js": ["js/bme680_chambertemp.js"],
             "css": ["css/bme680_chambertemp.css"],
         }
+
+    def is_template_autoescaped(self):
+        return True
+
+    def is_api_protected(self):
+        return True
 
     def get_api_commands(self):
         return {}

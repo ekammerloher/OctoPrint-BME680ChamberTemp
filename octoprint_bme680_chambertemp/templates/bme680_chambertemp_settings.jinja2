@@ -74,11 +74,11 @@
 
   <hr>
   <h4>Diagnostics</h4>
-  <p><strong>Status:</strong> <span data-bind="text: statusText"></span></p>
-  <p><strong>Last successful reading:</strong> <span data-bind="text: lastSuccessText"></span></p>
-  <p><strong>Last error:</strong> <span data-bind="text: lastErrorText"></span></p>
-  <p><strong>Configured bus/address:</strong> <span data-bind="text: configuredBus"></span> / <span data-bind="text: configuredAddress"></span></p>
-  <p><strong>Active address:</strong> <span data-bind="text: activeAddress"></span></p>
-  <p><strong>Injected temperature name:</strong> <span data-bind="text: temperatureName"></span></p>
-  <p><strong>Versions:</strong> plugin <span data-bind="text: pluginVersion"></span>, library <span data-bind="text: libraryVersion"></span></p>
+  <p><strong>Status:</strong> <span id="bme680_chambertemp_settings_status" data-bind="text: statusText">Initializing</span></p>
+  <p><strong>Last successful reading:</strong> <span id="bme680_chambertemp_settings_last_success" data-bind="text: lastSuccessText">--</span></p>
+  <p><strong>Last error:</strong> <span id="bme680_chambertemp_settings_last_error" data-bind="text: lastErrorText">--</span></p>
+  <p><strong>Configured bus/address:</strong> <span id="bme680_chambertemp_settings_configured_bus" data-bind="text: configuredBus">--</span> / <span id="bme680_chambertemp_settings_configured_address" data-bind="text: configuredAddress">--</span></p>
+  <p><strong>Active address:</strong> <span id="bme680_chambertemp_settings_active_address" data-bind="text: activeAddress">--</span></p>
+  <p><strong>Injected temperature name:</strong> <span id="bme680_chambertemp_settings_temperature_name" data-bind="text: temperatureName">chamber</span></p>
+  <p><strong>Versions:</strong> plugin <span id="bme680_chambertemp_settings_plugin_version" data-bind="text: pluginVersion">--</span>, library <span id="bme680_chambertemp_settings_library_version" data-bind="text: libraryVersion">--</span></p>
 </div>

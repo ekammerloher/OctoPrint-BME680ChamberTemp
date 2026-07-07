@@ -18,6 +18,7 @@ $(function () {
         self.pluginVersion = ko.observable(null);
         self.libraryVersion = ko.observable(null);
         self.showTab = ko.observable(true);
+        self.refreshTimer = null;
 
         self.formatNumber = function (value, digits) {
             return _.isNumber(value) && _.isFinite(value) ? value.toFixed(digits) : "--";
@@ -46,6 +47,22 @@ $(function () {
             if (status === "stopped") return "Stopped";
             return "Unknown";
         });
+
+        self.renderFallbackState = function () {
+            $("#bme680_chambertemp_status, #bme680_chambertemp_settings_status").text(self.statusText());
+            $("#bme680_chambertemp_temperature").text(self.temperatureText());
+            $("#bme680_chambertemp_humidity").text(self.humidityText());
+            $("#bme680_chambertemp_gas").text(self.gasResistanceText());
+            $("#bme680_chambertemp_last_update").text(self.lastUpdateText());
+            $("#bme680_chambertemp_last_success, #bme680_chambertemp_settings_last_success").text(self.lastSuccessText());
+            $("#bme680_chambertemp_last_error, #bme680_chambertemp_settings_last_error").text(self.lastErrorText());
+            $("#bme680_chambertemp_configured_bus, #bme680_chambertemp_settings_configured_bus").text(self.configuredBus() == null ? "--" : self.configuredBus());
+            $("#bme680_chambertemp_configured_address, #bme680_chambertemp_settings_configured_address").text(self.configuredAddress() || "--");
+            $("#bme680_chambertemp_active_address, #bme680_chambertemp_settings_active_address").text(self.activeAddress() || "--");
+            $("#bme680_chambertemp_plugin_version, #bme680_chambertemp_settings_plugin_version").text(self.pluginVersion() || "--");
+            $("#bme680_chambertemp_library_version, #bme680_chambertemp_settings_library_version").text(self.libraryVersion() || "--");
+            $("#bme680_chambertemp_settings_temperature_name").text(self.temperatureName() || "chamber");
+        };
 
         self.isReadingAvailable = ko.pureComputed(function () {
             return _.isNumber(self.temperature()) && _.isFinite(self.temperature());
@@ -81,6 +98,7 @@ $(function () {
             self.libraryVersion(data.library_version || "--");
             self.showTab(data.show_tab !== false);
             self.toggleTabVisibility();
+            self.renderFallbackState();
         };
 
         self.toggleTabVisibility = function () {
@@ -89,17 +107,47 @@ $(function () {
         };
 
         self.requestState = function () {
-            OctoPrint.simpleApiGet("bme680_chambertemp").done(function (response) {
-                self.updateState(response);
-            });
+            return OctoPrint.simpleApiGet("bme680_chambertemp")
+                .done(function (response) {
+                    self.updateState(response);
+                })
+                .fail(function () {
+                    // Ignore transient auth/socket timing issues; polling will retry.
+                });
+        };
+
+        self.startPolling = function () {
+            if (self.refreshTimer !== null) return;
+            self.refreshTimer = window.setInterval(function () {
+                self.requestState();
+            }, 10000);
+        };
+
+        self.stopPolling = function () {
+            if (self.refreshTimer === null) return;
+            window.clearInterval(self.refreshTimer);
+            self.refreshTimer = null;
         };
 
         self.onBeforeBinding = function () {
             self.requestState();
+            self.startPolling();
         };
 
         self.onSettingsShown = function () {
             self.requestState();
+        };
+
+        self.onUserLoggedIn = function () {
+            self.requestState();
+        };
+
+        self.onUserLoggedOut = function () {
+            self.stopPolling();
+        };
+
+        self.onAllBound = function () {
+            self.startPolling();
         };
 
         self.onDataUpdaterPluginMessage = function (plugin, data) {
